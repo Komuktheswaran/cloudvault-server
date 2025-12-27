@@ -13,10 +13,12 @@ app.use(express.json());
 const fileRoutes = require('./src/routes/fileRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const userRoutes = require('./src/routes/userRoutes');
+const healthRoutes = require('./src/routes/healthRoutes');
 
 app.use('/api/files', fileRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/health', healthRoutes);
 
 app.get('/', (req, res) => {
   res.send('Universal Drive API is running');
