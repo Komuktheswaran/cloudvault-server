@@ -1,0 +1,28 @@
+node_modules/
+client/node_modules
+server/node_modules
+server/.env
+server/serviceAccountKey.json
+server/prisma/dev.db
+server/server.log
+google-services.json
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Firebase
+serviceAccountKey.json
+google-services.json
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+*.log
+server.log
+
+# IDE
+.vscode/
+.idea/
