@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String?  
+  googleId  String?  @unique
+  firebaseUid String? @unique
+  name      String?
+  avatarUrl String?
+  
+  // AWS Configuration (Encrypted or Plaintext for MVP)
+  awsAccessKeyId     String?
+  awsSecretAccessKey String?
+  awsRegion          String?   @default("us-east-1")
+  awsBucketName      String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  files     File[]
+  folders   Folder[]
+}
+
+model Folder {
+  id        Int      @id @default(autoincrement())
+  name      String
+  parentId  Int?     // For nested folders
+  parent    Folder?  @relation("SubFolders", fields: [parentId], references: [id])
+  children  Folder[] @relation("SubFolders")
+  
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  
+  files     File[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String   
+  key       String   @unique // S3 Key
+  mimeType  String
+  size      Int
+  url       String?  
+  isPublic  Boolean  @default(false)
+  isDeleted Boolean  @default(false) // Trash functionality
+  
+  folderId  Int?
+  folder    Folder?  @relation(fields: [folderId], references: [id])
+  
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
